@@ -9,7 +9,23 @@ const options = {
     initialState: initialState,
     reducers: {
         addToCart: (state, action) => {
-            return [...state, action.payload]
+            const itemExists = [...state].find(it => it.id === action.payload.id);
+            if (!itemExists) {
+                state.push(action.payload)
+            }
+        },
+        toggleQuantity: (state, action) => {
+            return state.map(item => {
+                if (item.name !== action.payload.name) {
+                    return item
+                }
+
+                return {
+                    ...item,
+                    quantity: +action.payload.quantity,
+                }
+            })
+
         }
     }
 };
@@ -24,7 +40,7 @@ export const selectItems = (state) => state.items;
 
 export const selectTotal = (state) => {
     if (state.items.length > 0) {
-        return state.items.map(item => item.price).reduce((acc, cur) => acc + cur)
+        return state.items.map(item => item.price * item.quantity).reduce((acc, cur) => acc + cur)
     }
 };
 
@@ -33,5 +49,5 @@ export const selectTotal = (state) => {
 
 
 
-export const { addToCart } = itemsSlice.actions;
+export const { addToCart, toggleQuantity } = itemsSlice.actions;
 export default itemsSlice.reducer;

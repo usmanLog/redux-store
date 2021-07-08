@@ -7,7 +7,7 @@ import { CartItem } from '../../components/CartItem';
 export function Cart() {
 
     const total = useSelector(selectTotal);
-    const items = useSelector(selectItems)
+    const items = useSelector(selectItems);
 
 
     return (
